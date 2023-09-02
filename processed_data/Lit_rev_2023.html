@@ -359,47 +359,493 @@ display: none;
 
 <div id="obtain-mean-score-for-each-study" class="section level4">
 <h4>1) Obtain mean score for each study</h4>
-<pre class="r"><code>library(dplyr)
-
-# Convert YES/NO values to 1 and 0
-master_dat &lt;- master_dat %&gt;% 
-  mutate(across(where(is.character),
-                ~case_when(. == &quot;Yes&quot; ~ &quot;1&quot;,
-                           . == &quot;No&quot; ~ &quot;0&quot;,
-                           TRUE ~ as.character(.))))
-
-# Get Row Means and Column Means.
-master_means &lt;- master_dat %&gt;%
-  slice(4:n()) %&gt;%
-  select(-c(1, 3))
-
-# Convert Q01 to Q47 columns to numeric
-numeric_cols &lt;- colnames(master_means)[2:48]
-master_means[numeric_cols] &lt;- 
-  sapply(master_means[numeric_cols], as.numeric)</code></pre>
-<pre><code>## Warning in lapply(X = X, FUN = FUN, ...): NAs introduced by coercion
-
-## Warning in lapply(X = X, FUN = FUN, ...): NAs introduced by coercion
-
-## Warning in lapply(X = X, FUN = FUN, ...): NAs introduced by coercion
-
-## Warning in lapply(X = X, FUN = FUN, ...): NAs introduced by coercion</code></pre>
-<pre class="r"><code># Calculate row means for numeric columns
-master_means$study_mean &lt;- 
-  rowMeans(master_means[numeric_cols], na.rm = TRUE)
-
-# Calculate column means for numeric columns
-question_means &lt;- master_means %&gt;%
-  summarize(across(starts_with(&quot;Q&quot;), ~mean(., na.rm = TRUE)))
-
-# Create tables
-study_table &lt;- master_dat %&gt;%
-  left_join(master_means, by = &quot;ID&quot;) %&gt;%
-  select(ID, Study, Author, study_mean) 
-
-# Remove first three rows from study_table
-study_table &lt;- study_table %&gt;%
-  slice(4:n())</code></pre>
+<div id="yvvfbyljtk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#yvvfbyljtk table {
+font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+}
+#yvvfbyljtk thead, #yvvfbyljtk tbody, #yvvfbyljtk tfoot, #yvvfbyljtk tr, #yvvfbyljtk td, #yvvfbyljtk th {
+border-style: none;
+}
+#yvvfbyljtk p {
+margin: 0;
+padding: 0;
+}
+#yvvfbyljtk .gt_table {
+display: table;
+border-collapse: collapse;
+line-height: normal;
+margin-left: auto;
+margin-right: auto;
+color: #333333;
+font-size: 13px;
+font-weight: normal;
+font-style: normal;
+background-color: #FFFFFF;
+width: auto;
+border-top-style: solid;
+border-top-width: 2px;
+border-top-color: #A8A8A8;
+border-right-style: none;
+border-right-width: 2px;
+border-right-color: #D3D3D3;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #A8A8A8;
+border-left-style: none;
+border-left-width: 2px;
+border-left-color: #D3D3D3;
+}
+#yvvfbyljtk .gt_caption {
+padding-top: 4px;
+padding-bottom: 4px;
+}
+#yvvfbyljtk .gt_title {
+color: #333333;
+font-size: 125%;
+font-weight: initial;
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 5px;
+padding-right: 5px;
+border-bottom-color: #FFFFFF;
+border-bottom-width: 0;
+}
+#yvvfbyljtk .gt_subtitle {
+color: #333333;
+font-size: 85%;
+font-weight: initial;
+padding-top: 3px;
+padding-bottom: 5px;
+padding-left: 5px;
+padding-right: 5px;
+border-top-color: #FFFFFF;
+border-top-width: 0;
+}
+#yvvfbyljtk .gt_heading {
+background-color: #FFFFFF;
+text-align: center;
+border-bottom-color: #FFFFFF;
+border-left-style: none;
+border-left-width: 1px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 1px;
+border-right-color: #D3D3D3;
+}
+#yvvfbyljtk .gt_bottom_border {
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+}
+#yvvfbyljtk .gt_col_headings {
+border-top-style: solid;
+border-top-width: 2px;
+border-top-color: #D3D3D3;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+border-left-style: none;
+border-left-width: 1px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 1px;
+border-right-color: #D3D3D3;
+}
+#yvvfbyljtk .gt_col_heading {
+color: #333333;
+background-color: #FFFFFF;
+font-size: 100%;
+font-weight: normal;
+text-transform: inherit;
+border-left-style: none;
+border-left-width: 1px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 1px;
+border-right-color: #D3D3D3;
+vertical-align: bottom;
+padding-top: 5px;
+padding-bottom: 6px;
+padding-left: 5px;
+padding-right: 5px;
+overflow-x: hidden;
+}
+#yvvfbyljtk .gt_column_spanner_outer {
+color: #333333;
+background-color: #FFFFFF;
+font-size: 100%;
+font-weight: normal;
+text-transform: inherit;
+padding-top: 0;
+padding-bottom: 0;
+padding-left: 4px;
+padding-right: 4px;
+}
+#yvvfbyljtk .gt_column_spanner_outer:first-child {
+padding-left: 0;
+}
+#yvvfbyljtk .gt_column_spanner_outer:last-child {
+padding-right: 0;
+}
+#yvvfbyljtk .gt_column_spanner {
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+vertical-align: bottom;
+padding-top: 5px;
+padding-bottom: 5px;
+overflow-x: hidden;
+display: inline-block;
+width: 100%;
+}
+#yvvfbyljtk .gt_spanner_row {
+border-bottom-style: hidden;
+}
+#yvvfbyljtk .gt_group_heading {
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+color: #333333;
+background-color: #FFFFFF;
+font-size: 100%;
+font-weight: initial;
+text-transform: inherit;
+border-top-style: solid;
+border-top-width: 2px;
+border-top-color: #D3D3D3;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+border-left-style: none;
+border-left-width: 1px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 1px;
+border-right-color: #D3D3D3;
+vertical-align: middle;
+text-align: left;
+}
+#yvvfbyljtk .gt_empty_group_heading {
+padding: 0.5px;
+color: #333333;
+background-color: #FFFFFF;
+font-size: 100%;
+font-weight: initial;
+border-top-style: solid;
+border-top-width: 2px;
+border-top-color: #D3D3D3;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+vertical-align: middle;
+}
+#yvvfbyljtk .gt_from_md > :first-child {
+margin-top: 0;
+}
+#yvvfbyljtk .gt_from_md > :last-child {
+margin-bottom: 0;
+}
+#yvvfbyljtk .gt_row {
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+margin: 10px;
+border-top-style: solid;
+border-top-width: 1px;
+border-top-color: #D3D3D3;
+border-left-style: none;
+border-left-width: 1px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 1px;
+border-right-color: #D3D3D3;
+vertical-align: middle;
+overflow-x: hidden;
+}
+#yvvfbyljtk .gt_stub {
+color: #333333;
+background-color: #FFFFFF;
+font-size: 100%;
+font-weight: initial;
+text-transform: inherit;
+border-right-style: solid;
+border-right-width: 2px;
+border-right-color: #D3D3D3;
+padding-left: 5px;
+padding-right: 5px;
+}
+#yvvfbyljtk .gt_stub_row_group {
+color: #333333;
+background-color: #FFFFFF;
+font-size: 100%;
+font-weight: initial;
+text-transform: inherit;
+border-right-style: solid;
+border-right-width: 2px;
+border-right-color: #D3D3D3;
+padding-left: 5px;
+padding-right: 5px;
+vertical-align: top;
+}
+#yvvfbyljtk .gt_row_group_first td {
+border-top-width: 2px;
+}
+#yvvfbyljtk .gt_row_group_first th {
+border-top-width: 2px;
+}
+#yvvfbyljtk .gt_summary_row {
+color: #333333;
+background-color: #FFFFFF;
+text-transform: inherit;
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+}
+#yvvfbyljtk .gt_first_summary_row {
+border-top-style: solid;
+border-top-color: #D3D3D3;
+}
+#yvvfbyljtk .gt_first_summary_row.thick {
+border-top-width: 2px;
+}
+#yvvfbyljtk .gt_last_summary_row {
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+}
+#yvvfbyljtk .gt_grand_summary_row {
+color: #333333;
+background-color: #FFFFFF;
+text-transform: inherit;
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+}
+#yvvfbyljtk .gt_first_grand_summary_row {
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+border-top-style: double;
+border-top-width: 6px;
+border-top-color: #D3D3D3;
+}
+#yvvfbyljtk .gt_last_grand_summary_row_top {
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+border-bottom-style: double;
+border-bottom-width: 6px;
+border-bottom-color: #D3D3D3;
+}
+#yvvfbyljtk .gt_striped {
+background-color: rgba(128, 128, 128, 0.05);
+}
+#yvvfbyljtk .gt_table_body {
+border-top-style: solid;
+border-top-width: 2px;
+border-top-color: #D3D3D3;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+}
+#yvvfbyljtk .gt_footnotes {
+color: #333333;
+background-color: #FFFFFF;
+border-bottom-style: none;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+border-left-style: none;
+border-left-width: 2px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 2px;
+border-right-color: #D3D3D3;
+}
+#yvvfbyljtk .gt_footnote {
+margin: 0px;
+font-size: 90%;
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 5px;
+padding-right: 5px;
+}
+#yvvfbyljtk .gt_sourcenotes {
+color: #333333;
+background-color: #FFFFFF;
+border-bottom-style: none;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+border-left-style: none;
+border-left-width: 2px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 2px;
+border-right-color: #D3D3D3;
+}
+#yvvfbyljtk .gt_sourcenote {
+font-size: 90%;
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 5px;
+padding-right: 5px;
+}
+#yvvfbyljtk .gt_left {
+text-align: left;
+}
+#yvvfbyljtk .gt_center {
+text-align: center;
+}
+#yvvfbyljtk .gt_right {
+text-align: right;
+font-variant-numeric: tabular-nums;
+}
+#yvvfbyljtk .gt_font_normal {
+font-weight: normal;
+}
+#yvvfbyljtk .gt_font_bold {
+font-weight: bold;
+}
+#yvvfbyljtk .gt_font_italic {
+font-style: italic;
+}
+#yvvfbyljtk .gt_super {
+font-size: 65%;
+}
+#yvvfbyljtk .gt_footnote_marks {
+font-size: 75%;
+vertical-align: 0.4em;
+position: initial;
+}
+#yvvfbyljtk .gt_asterisk {
+font-size: 100%;
+vertical-align: 0;
+}
+#yvvfbyljtk .gt_indent_1 {
+text-indent: 5px;
+}
+#yvvfbyljtk .gt_indent_2 {
+text-indent: 10px;
+}
+#yvvfbyljtk .gt_indent_3 {
+text-indent: 15px;
+}
+#yvvfbyljtk .gt_indent_4 {
+text-indent: 20px;
+}
+#yvvfbyljtk .gt_indent_5 {
+text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="ID">ID</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Study">Study</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Author">Author</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Mean">Mean</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="ID" class="gt_row gt_left">S001</td>
+<td headers="Study" class="gt_row gt_left">Utility of Machine-Learning Approaches to Identify Behavioral Markers for Substance Use Disorders: Impulsivity Dimensions as Predictors of Current Cocaine Dependence</td>
+<td headers="Author" class="gt_row gt_left">(Ahn et al., 2016)</td>
+<td headers="Mean" class="gt_row gt_right">0.7111111</td></tr>
+    <tr><td headers="ID" class="gt_row gt_left">S002</td>
+<td headers="Study" class="gt_row gt_left">Machine-learning identifies substance-specific behavioral markers for opiate and stimulant dependence</td>
+<td headers="Author" class="gt_row gt_left">(Ahn et al., 2016)</td>
+<td headers="Mean" class="gt_row gt_right">0.5434783</td></tr>
+    <tr><td headers="ID" class="gt_row gt_left">S003</td>
+<td headers="Study" class="gt_row gt_left">Targeted Prescription of Cognitive–Behavioral Therapy Versus Person-
+Centered Counseling for Depression Using a Machine Learning Approach</td>
+<td headers="Author" class="gt_row gt_left">(Delgadillo &amp; Gonzalez Salas Duhne, 2020)</td>
+<td headers="Mean" class="gt_row gt_right">0.6956522</td></tr>
+    <tr><td headers="ID" class="gt_row gt_left">S004</td>
+<td headers="Study" class="gt_row gt_left">Optimizing Neuropsychological Assessments for Cognitive, Behavioral, and Functional Impairment Classification: 
+A Machine Learning Study</td>
+<td headers="Author" class="gt_row gt_left">(Battista et al., 2017)</td>
+<td headers="Mean" class="gt_row gt_right">0.6521739</td></tr>
+    <tr><td headers="ID" class="gt_row gt_left">S005</td>
+<td headers="Study" class="gt_row gt_left">Understanding the relationship between patient language and outcomes in internetenabled cognitive behavioural therapy: A deep learning approach to automatic coding of session transcripts</td>
+<td headers="Author" class="gt_row gt_left">(Ewbank et al., 2021)</td>
+<td headers="Mean" class="gt_row gt_right">0.6521739</td></tr>
+    <tr><td headers="ID" class="gt_row gt_left">S006</td>
+<td headers="Study" class="gt_row gt_left">Prenatal Opioid Exposure Reprograms the Behavioral Response to Future Alcohol Reward</td>
+<td headers="Author" class="gt_row gt_left">(Grecco et al., 2022)</td>
+<td headers="Mean" class="gt_row gt_right">0.4090909</td></tr>
+    <tr><td headers="ID" class="gt_row gt_left">S007</td>
+<td headers="Study" class="gt_row gt_left">Identifying neuroanatomical and behavioral features for autism spectrum disorder diagnosis in children using machine learning</td>
+<td headers="Author" class="gt_row gt_left">(Han et al., 2022)</td>
+<td headers="Mean" class="gt_row gt_right">0.5434783</td></tr>
+    <tr><td headers="ID" class="gt_row gt_left">S008</td>
+<td headers="Study" class="gt_row gt_left">Predicting cognitive behavioral therapy outcome in the outpatient sector based on clinical routine data: A machine learning approach</td>
+<td headers="Author" class="gt_row gt_left">(Hilbert et al., 2020)</td>
+<td headers="Mean" class="gt_row gt_right">0.7826087</td></tr>
+    <tr><td headers="ID" class="gt_row gt_left">S009</td>
+<td headers="Study" class="gt_row gt_left">Developing Machine Learning Models for Behavioral Coding</td>
+<td headers="Author" class="gt_row gt_left">(Idalski Carcone et al., 2019)</td>
+<td headers="Mean" class="gt_row gt_right">0.6521739</td></tr>
+    <tr><td headers="ID" class="gt_row gt_left">S010</td>
+<td headers="Study" class="gt_row gt_left">Dynamic prediction and identification of cases at risk of relapse following completion of low-intensity cognitive behavioural therapy</td>
+<td headers="Author" class="gt_row gt_left">(Lorimer et al., 2021)</td>
+<td headers="Mean" class="gt_row gt_right">0.8695652</td></tr>
+    <tr><td headers="ID" class="gt_row gt_left">S011</td>
+<td headers="Study" class="gt_row gt_left">Predicting Depression From Smartphone Behavioral Markers Using Machine Learning Methods, Hyperparameter Optimization, and Feature Importance Analysis: Exploratory Study</td>
+<td headers="Author" class="gt_row gt_left">(Asare et al., 2021)</td>
+<td headers="Mean" class="gt_row gt_right">0.7608696</td></tr>
+    <tr><td headers="ID" class="gt_row gt_left">S012</td>
+<td headers="Study" class="gt_row gt_left">Informing the study of suicidal thoughts and behaviors in distressed young adults: The use of a machine learning approach to identify neuroimaging, psychiatric, behavioral, and demographic correlates</td>
+<td headers="Author" class="gt_row gt_left">(Oppenheimer et al., 2021)</td>
+<td headers="Mean" class="gt_row gt_right">0.6086957</td></tr>
+    <tr><td headers="ID" class="gt_row gt_left">S013</td>
+<td headers="Study" class="gt_row gt_left">Using Machine Learning to Predict Suicide Attempts in Military Personnel</td>
+<td headers="Author" class="gt_row gt_left">(Rozek et al., 2020)</td>
+<td headers="Mean" class="gt_row gt_right">0.4782609</td></tr>
+    <tr><td headers="ID" class="gt_row gt_left">S014</td>
+<td headers="Study" class="gt_row gt_left">Personalized treatment selection in routine care: Integrating machine learning and statistical algorithms to recommend cognitive behavioral or psychodynamic therapy</td>
+<td headers="Author" class="gt_row gt_left">(Schwartz et al., 2021)</td>
+<td headers="Mean" class="gt_row gt_right">0.5434783</td></tr>
+    <tr><td headers="ID" class="gt_row gt_left">S015</td>
+<td headers="Study" class="gt_row gt_left">Analyzing online consumer purchase psychology through hybrid machine learning</td>
+<td headers="Author" class="gt_row gt_left">(Srivastava et al., 2022)</td>
+<td headers="Mean" class="gt_row gt_right">0.7391304</td></tr>
+    <tr><td headers="ID" class="gt_row gt_left">S016</td>
+<td headers="Study" class="gt_row gt_left">Predicting outcome of daycare cognitive behavioural therapy in a naturalistic sample of patients with PTSD: a machine learning approach</td>
+<td headers="Author" class="gt_row gt_left">(Struck et al., 2021)</td>
+<td headers="Mean" class="gt_row gt_right">0.6956522</td></tr>
+    <tr><td headers="ID" class="gt_row gt_left">S017</td>
+<td headers="Study" class="gt_row gt_left">Predicting Emotional States Using Behavioral Markers Derived From Passively Sensed Data: Data-Driven Machine Learning Approach</td>
+<td headers="Author" class="gt_row gt_left">(Sükei et al., 2021)</td>
+<td headers="Mean" class="gt_row gt_right">0.7826087</td></tr>
+    <tr><td headers="ID" class="gt_row gt_left">S018</td>
+<td headers="Study" class="gt_row gt_left">Prediction of Autism at 3 Years from Behavioural and Developmental Measures in High-Risk Infants: A Longitudinal Cross-Domain Classifier Analysis</td>
+<td headers="Author" class="gt_row gt_left">(Bussu et al., 2018)</td>
+<td headers="Mean" class="gt_row gt_right">0.7391304</td></tr>
+    <tr><td headers="ID" class="gt_row gt_left">S019</td>
+<td headers="Study" class="gt_row gt_left">Using machine learning to investigate selfmedication purchasing in England via high street retailer loyalty card data</td>
+<td headers="Author" class="gt_row gt_left">(Davies et al., 2018)</td>
+<td headers="Mean" class="gt_row gt_right">0.8913043</td></tr>
+    <tr><td headers="ID" class="gt_row gt_left">S020</td>
+<td headers="Study" class="gt_row gt_left">Predicting alcohol dependence treatment outcomes: a prospective comparative study of clinical psychologists versus ‘trained’ machine learning models</td>
+<td headers="Author" class="gt_row gt_left">(Symons et al., 2020)</td>
+<td headers="Mean" class="gt_row gt_right">0.9130435</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
 </div>
 
 
