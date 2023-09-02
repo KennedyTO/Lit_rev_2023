@@ -357,7 +357,15 @@ display: none;
 </div>
 
 
-
+<div id="obtain-mean-score-for-each-study" class="section level4">
+<h4>1) Obtain mean score for each study</h4>
+<pre class="r"><code># Convert YES/NO values to 1 and 0
+master_dat &lt;- master_dat %&gt;% 
+  mutate(across(where(is.character),
+                ~case_when(. == &quot;Yes&quot; ~ &quot;1&quot;,
+                           . == &quot;No&quot; ~ &quot;0&quot;,
+                           TRUE ~ as.character(.))))</code></pre>
+</div>
 
 
 

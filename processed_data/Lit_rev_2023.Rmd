@@ -5,7 +5,30 @@ date: "2023-09-02"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r setup, include=FALSE, echo=FALSE, message=FALSE}
+# Load libraries
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(knitr)
+library(tidyverse)
+
+
+# Read excel file
+master_dat <- read_excel("~/Desktop/IRP/Literature_review_2023/raw_data/Dat_01.xlsx")
+
+write.csv(master_dat,"/Users/kensuzuki/desktop/AAA.csv")
+```
+
+#### 1) Obtain mean score for each study
+```{r setup, include=FALSE, echo=FALSE, message=FALSE}
+# Convert YES/NO values to 1 and 0
+master_dat <- master_dat %>% 
+  mutate(across(where(is.character),
+                ~case_when(. == "Yes" ~ "1",
+                           . == "No" ~ "0",
+                           TRUE ~ as.character(.))))
+
+
 ```
 
