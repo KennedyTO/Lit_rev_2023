@@ -2,7 +2,9 @@
 title: "Literature_Rev_2023"
 author: "Ken Suzuki"
 date: "2023-09-02"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE, echo=FALSE, message=FALSE}
@@ -13,21 +15,47 @@ library(ggplot2)
 library(knitr)
 library(tidyverse)
 
-
 # Read excel file
 master_dat <- read_excel("~/Desktop/IRP/Literature_review_2023/raw_data/Dat_01.xlsx")
-
-write.csv(master_dat,"/Users/kensuzuki/desktop/AAA.csv")
 ```
 
 #### 1) Obtain mean score for each study
-```{r setup, include=FALSE, echo=FALSE, message=FALSE}
+```{r}
+library(dplyr)
+
 # Convert YES/NO values to 1 and 0
 master_dat <- master_dat %>% 
   mutate(across(where(is.character),
                 ~case_when(. == "Yes" ~ "1",
                            . == "No" ~ "0",
                            TRUE ~ as.character(.))))
+
+# Get Row Means and Column Means.
+master_means <- master_dat %>%
+  slice(4:n()) %>%
+  select(-c(1, 3))
+
+# Convert Q01 to Q47 columns to numeric
+numeric_cols <- colnames(master_means)[2:48]
+master_means[numeric_cols] <- 
+  sapply(master_means[numeric_cols], as.numeric)
+
+# Calculate row means for numeric columns
+master_means$study_mean <- 
+  rowMeans(master_means[numeric_cols], na.rm = TRUE)
+
+# Calculate column means for numeric columns
+question_means <- master_means %>%
+  summarize(across(starts_with("Q"), ~mean(., na.rm = TRUE)))
+
+# Create tables
+study_table <- master_dat %>%
+  left_join(master_means, by = "ID") %>%
+  select(ID, Study, Author, study_mean) 
+
+# Remove first three rows from study_table
+study_table <- study_table %>%
+  slice(4:n())
 
 
 ```
