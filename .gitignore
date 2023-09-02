@@ -48,4 +48,8 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 
+# .gitignore file
+*.log
+large_data_file.csv
+
 raw_data/
