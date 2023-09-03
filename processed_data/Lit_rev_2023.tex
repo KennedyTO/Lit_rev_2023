@@ -1,0 +1,198 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{longtable}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Literature\_Rev\_2023},
+  pdfauthor={Ken Suzuki},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Literature\_Rev\_2023}
+\author{Ken Suzuki}
+\date{2023-09-02}
+
+\begin{document}
+\maketitle
+
+\hypertarget{obtain-mean-score-for-each-study}{%
+\paragraph{1) Obtain mean score for each
+study}\label{obtain-mean-score-for-each-study}}
+
+\begin{longtable}{lllr}
+\toprule
+ID & Study & Author & Mean \\ 
+\midrule
+S001 & Utility of Machine-Learning Approaches to Identify Behavioral Markers for Substance Use Disorders: Impulsivity Dimensions as Predictors of Current Cocaine Dependence & (Ahn et al., 2016) & 0.7111111 \\ 
+S002 & Machine-learning identifies substance-specific behavioral markers for opiate and stimulant dependence & (Ahn et al., 2016) & 0.5434783 \\ 
+S003 & Targeted Prescription of Cognitive–Behavioral Therapy Versus Person-
+Centered Counseling for Depression Using a Machine Learning Approach & (Delgadillo \& Gonzalez Salas Duhne, 2020) & 0.6956522 \\ 
+S004 & Optimizing Neuropsychological Assessments for Cognitive, Behavioral, and Functional Impairment Classification: 
+A Machine Learning Study & (Battista et al., 2017) & 0.6521739 \\ 
+S005 & Understanding the relationship between patient language and outcomes in internetenabled cognitive behavioural therapy: A deep learning approach to automatic coding of session transcripts & (Ewbank et al., 2021) & 0.6521739 \\ 
+S006 & Prenatal Opioid Exposure Reprograms the Behavioral Response to Future Alcohol Reward & (Grecco et al., 2022) & 0.4090909 \\ 
+S007 & Identifying neuroanatomical and behavioral features for autism spectrum disorder diagnosis in children using machine learning & (Han et al., 2022) & 0.5434783 \\ 
+S008 & Predicting cognitive behavioral therapy outcome in the outpatient sector based on clinical routine data: A machine learning approach & (Hilbert et al., 2020) & 0.7826087 \\ 
+S009 & Developing Machine Learning Models for Behavioral Coding & (Idalski Carcone et al., 2019) & 0.6521739 \\ 
+S010 & Dynamic prediction and identification of cases at risk of relapse following completion of low-intensity cognitive behavioural therapy & (Lorimer et al., 2021) & 0.8695652 \\ 
+S011 & Predicting Depression From Smartphone Behavioral Markers Using Machine Learning Methods, Hyperparameter Optimization, and Feature Importance Analysis: Exploratory Study & (Asare et al., 2021) & 0.7608696 \\ 
+S012 & Informing the study of suicidal thoughts and behaviors in distressed young adults: The use of a machine learning approach to identify neuroimaging, psychiatric, behavioral, and demographic correlates & (Oppenheimer et al., 2021) & 0.6086957 \\ 
+S013 & Using Machine Learning to Predict Suicide Attempts in Military Personnel & (Rozek et al., 2020) & 0.4782609 \\ 
+S014 & Personalized treatment selection in routine care: Integrating machine learning and statistical algorithms to recommend cognitive behavioral or psychodynamic therapy & (Schwartz et al., 2021) & 0.5434783 \\ 
+S015 & Analyzing online consumer purchase psychology through hybrid machine learning & (Srivastava et al., 2022) & 0.7391304 \\ 
+S016 & Predicting outcome of daycare cognitive behavioural therapy in a naturalistic sample of patients with PTSD: a machine learning approach & (Struck et al., 2021) & 0.6956522 \\ 
+S017 & Predicting Emotional States Using Behavioral Markers Derived From Passively Sensed Data: Data-Driven Machine Learning Approach & (Sükei et al., 2021) & 0.7826087 \\ 
+S018 & Prediction of Autism at 3 Years from Behavioural and Developmental Measures in High-Risk Infants: A Longitudinal Cross-Domain Classifier Analysis & (Bussu et al., 2018) & 0.7391304 \\ 
+S019 & Using machine learning to investigate selfmedication purchasing in England via high street retailer loyalty card data & (Davies et al., 2018) & 0.8913043 \\ 
+S020 & Predicting alcohol dependence treatment outcomes: a prospective comparative study of clinical psychologists versus ‘trained’ machine learning models & (Symons et al., 2020) & 0.9130435 \\ 
+\bottomrule
+\end{longtable}
+
+\hypertarget{obtain-mean-scores-for-each-question}{%
+\subsubsection{2) Obtain mean scores for each
+question}\label{obtain-mean-scores-for-each-question}}
+
+\begin{longtable}{llllr}
+\toprule
+ID & Section & Topic & Question & Mean \\ 
+\midrule
+Q01 & Abstract & 01.Nature of Study & Identify the report as introducing a predictive model & 0.9500000 \\ 
+Q02 & Abstract & 02.Structured summary & Does the Abstract contain the following components?
+1. Background
+2. Objectives
+3. Data sources
+4. Performance metrics of the predictive model or models (if available, in both point estimates and confidence intervals
+5. Conclusion including the practical value of the developed predictive model or models & 0.5000000 \\ 
+Q03 & Introduction & 03.Rationale & Identify the goal of the study (if it is a clinical study, find the clinical goal) & 1.0000000 \\ 
+Q04 & Introduction & 03.Rationale & Review the current practice and prediction accuracy of any existing models & 0.8500000 \\ 
+Q05 & Introduction & 04.Objectives & State the nature of study being predictive modeling, defining the target of prediction & 0.9500000 \\ 
+Q06 & Introduction & 04.Objectives & Identify how the prediction problem may benefit the society (or clinical goal) & 0.9500000 \\ 
+Q07 & Methods & 05.Describe the setting & Identify the study (or clinical) setting for the target predictive model. & 0.8421053 \\ 
+Q08 & Methods & 05.Describe the setting & Identify the modeling context in terms of facility type, size, volume, and duration of available data & 0.7894737 \\ 
+Q09 & Methods & 06.Define the prediction problem & Define a measurement for the prediction goal (per patient or per hospitalization or per type of outcome). & 1.0000000 \\ 
+Q10 & Methods & 06.Define the prediction problem & Determine that the study is retrospective or prospective. & 0.5000000 \\ 
+Q11 & Methods & 06.Define the prediction problem & Identify the problem to be predictive (clinical term: prognostic) or evaluative (Clinical term: diagnostic). If the author did not clarify in the document, please extract the type from the context. & 0.5500000 \\ 
+Q12 & Methods & 06.Define the prediction problem & Determine the form of the prediction model: 
+(1) classification if the target variable is categorical
+(2) regression if the target variable is continuous
+(3) survival prediction if the target variable is the time to an event. & 1.0000000 \\ 
+Q13 & Methods & 06.Define the prediction problem & Translate survival prediction into a regression problem, with the target measured over a temporal window following the time of prediction. & NaN \\ 
+Q14 & Methods & 06.Define the prediction problem & Explain the practical costs of prediction errors (e.g., implications of underdiagnosis or overdiagnosis). & 0.0000000 \\ 
+Q15 & Methods & 06.Define the prediction problem & Define quality metrics for prediction models. (How success rate is measured) & 0.8500000 \\ 
+Q16 & Methods & 06.Define the prediction problem & Define the success criteria for prediction (e.g., based on metrics in internal validation or external validation in the context of the clinical problem) & 0.6500000 \\ 
+Q17 & Methods & 07.Prepare data for model building & Identify relevant data sources and quote the ethics approval number for data access. (Identify any discussions associated with research ethics). & 0.6000000 \\ 
+Q18 & Methods & 07.Prepare data for model building & State the inclusion and exclusion criteria for data. & 0.8000000 \\ 
+Q19 & Methods & 07.Prepare data for model building & Describe the time span of data and the sample or cohort size. & 0.6500000 \\ 
+Q20 & Methods & 07.Prepare data for model building & Define the observational units on which the response variable and predictor variables are defined. & 0.9500000 \\ 
+Q21 & Methods & 07.Prepare data for model building & Define the predictor variables. Extra caution is needed to prevent information leakage from the response variable to predictor variables.
+
+Check the presence of Cross-validation or data split (Training and Testing) in the study, which includes measures for information leakage. & 0.9000000 \\ 
+Q22 & Methods & 07.Prepare data for model building & Describe the data preprocessing performed, including data cleaning and transformation. & 0.8000000 \\ 
+Q23 & Methods & 07.Prepare data for model building & Remove outliers with impossible or extreme responses; state any criteria used for outlier removal. & 0.3500000 \\ 
+Q24 & Methods & 07.Prepare data for model building & State how missing values were handled. & 0.6500000 \\ 
+Q25 & Methods & 07.Prepare data for model building & Describe the basic statistics of the dataset, particularly of the response variable. These include the ratio of positive to negative classes for a classification problem and the distribution of the response variable for regression problem. & 0.8500000 \\ 
+Q26 & Methods & 07.Prepare data for model building & Define the model validation strategies. Internal validation is the minimum requirement; external validation should also be performed whenever possible. & 0.9500000 \\ 
+Q27 & Methods & 07.Prepare data for model building & Specify the internal validation strategy. Common methods include: random split, time-based split, patient-based split, Holdout Method, K-Fold Cross Validation, Stratified K-Fold Cross Validation, Leave-One-Out Cross Validation (LOOCV), Repeated Random Subsampling, Bootstrapping as the internal validation strategy. & 0.9500000 \\ 
+Q28 & Methods & 07.Prepare data for model building & Define the validation metrics. 
+- For regression problems, the normalized root-mean-square error should be used. 
+- For classification problems, the metrics should include sensitivity, specificity, positive predictive value, negative predictive value, area under the ROC curve, and calibration plot. & 0.7500000 \\ 
+Q29 & Methods & 07.Prepare data for model building & For retrospective studies, split the data into a training set and a validation set. For prospective studies, define the starting time for validation data collection. & 0.6500000 \\ 
+Q30 & Methods & 08.Build the predictive model & Identify independent variables that predominantly take a single value (e.g., being zero 99\% of the time).
+
+AKA: Low variance or near-zero variance predictor 
+
+(Random forest, XGBoost, Lasso regression, Ridge Regression, Elastic Net etc. remove near-zero variance). & 0.4000000 \\ 
+Q31 & Methods & 08.Build the predictive model & Identify and remove redundant independent variables.
+
+(Identify take note if the ML models the authors chose Lasso regression, Ridge Regression, Elastic Net etc. Decision tress, Neural Networks with regularization, Random Forest, Gradient Boosted Trees). & 0.6000000 \\ 
+Q32 & Methods & 08.Build the predictive model & Identify the independent variables that may suffer from the perfect separation problem.
+
+(Identify take note if the ML models the authors chose Lasso regression, Ridge Regression, Elastic Net etc. Decision tress, Neural Networks with regularization, Random Forest, Gradient Boosted Trees). & 0.2631579 \\ 
+Q33 & Methods & 08.Build the predictive model & Report the number of independent variables, the number of positive examples, and the number of negative examples. & 0.5500000 \\ 
+Q34 & Methods & 08.Build the predictive model & Assess whether sufficient data are available for a good fit of the model. 
+In particular, for classification, there should be a sufficient number of observations in both positive and negative classes.  & 0.5000000 \\ 
+Q35 & Methods & 08.Build the predictive model & Determine a set of candidate modelling techniques (e.g., logistic regression, random forest, or deep learning). 
+
+If only one type of model was used, justify the decision for using that model. & 0.5500000 \\ 
+Q36 & Methods & 08.Build the predictive model & Define the performance metrics to select the best model. & 0.5500000 \\ 
+Q37 & Methods & 08.Build the predictive model & Specify the model selection strategy. 
+Common methods include K-fold validation or bootstrap to estimate the lost function on a grid of candidate parameter values. For K-fold validation, proper stratification by the response variable is needed. & 0.5000000 \\ 
+Q38 & Methods & 08.Build the predictive model & For model selection, include discussion on (1) balance between model accuracy and model simplicity or interpretability, and (2) the familiarity with the modeling techniques of the end user. & 0.2000000 \\ 
+Q39 & Results & 09.Report the final model and performance & Report the predictive performance of the final model in terms of the validation metrics specified in the methods section.
+ & 0.9000000 \\ 
+Q40 & Results & 09.Report the final model and performance & Comparison with other models (in the literature should be based on confidence intervals). & 0.3000000 \\ 
+Q41 & Results & 09.Report the final model and performance & Interpretation of the final model. If possible, report what variables were shown to be predictive of the response variable. State which subpopulation has the best prediction and which subpopulation is most difficult to predict. & 0.9500000 \\ 
+Q42 & Discussion & 10.Clinical implications & Report the (clinical) implications derived from the obtained predictive performance. 
+
+For example, report the dollar amount that could be saved with better prediction. How many patients could benefit from a care model leveraging the model prediction? And to what extent? & 0.9000000 \\ 
+Q43 & Discussion & 10.Clinical implications & Discuss the following potential limitations:
+Assumed input and output data format & 0.2000000 \\ 
+Q44 & Discussion & 10.Clinical implications & Potential pitfalls in interpreting the model & 0.9500000 \\ 
+Q45 & Discussion & 10.Clinical implications & Potential bias of the data used in modeling & 0.8500000 \\ 
+Q46 & Discussion & 10.Clinical implications & Generalizability of the data & 0.9500000 \\ 
+Q47 & Discussion & 11.Unexpected results during the experiments & Report unexpected signs of coefficients, indicating collinearity or complex interaction between predictor variables & 0.1000000 \\ 
+\bottomrule
+\end{longtable}
+
+\end{document}

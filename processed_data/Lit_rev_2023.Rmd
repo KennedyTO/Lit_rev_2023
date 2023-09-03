@@ -7,7 +7,7 @@ output:
   pdf_document: default
 ---
 
-```{r setup, include=FALSE, echo=FALSE, message=FALSE}
+```{r setup, include=FALSE, echo = FALSE, message = FALSE}
 library(readxl)
 library(dplyr)
 library(ggplot2)
@@ -38,10 +38,10 @@ study_mean <- study_mean %>%
 study_mean <- study_mean %>% 
   mutate(across(starts_with("Q"), as.numeric))
 
-# Calculate row means for columns Q01 to Q47
+# Calculate row means for columns Q01 to Q47, rounded to 3 decimal places
 study_mean <- study_mean %>%
   rowwise() %>%
-  mutate(Mean = mean(c_across(Q01:Q47), na.rm = TRUE)) %>%
+  mutate(Mean = round(mean(c_across(Q01:Q47), na.rm = TRUE), 3)) %>%
   ungroup()
 
 # Create tables
@@ -61,16 +61,17 @@ gt_table <- gt(study_table) %>%
 
 # Display the gt table
 gt_table
+
 ```
 
 ### 2) Obtain mean scores for each question
-```{r}
+```{r, echo=FALSE}
 # Calculate column means 
 question_mean <- study_mean %>%
-  select(-ID) %>%  # Remove ID and Mean columns
-  summarise(across(everything(), mean, na.rm = TRUE))
+  select(-ID) %>%  # Remove ID column
+  summarise(across(everything(), \(x) round(mean(x, na.rm = TRUE), 3)))
 
-# Extracting the third row and transposing it
+# Extract the third row and transpose it
 question_table <- master_dat %>% 
   slice(3) %>%
   gather(key = "variable", value = "value", -ID) 
@@ -80,30 +81,54 @@ question_table <- question_table %>%
   slice(-(1:2)) %>%
   select(-ID)   
 
+# Extract the first row and transpose it
+V1 <- master_dat %>% 
+  slice(1) %>%
+  gather(key = "variable", value = "value", -ID) 
+
+# Remove the first two rows and the first column from the transposed dataset
+V1 <- V1 %>%
+  slice(-(1:2)) %>%
+  select(-ID)   
+
+# Extract the first row and transpose it
+V2 <- master_dat %>% 
+  slice(2) %>%
+  gather(key = "variable", value = "value", -ID) 
+
+# Remove the first two rows and the first column from the transposed dataset
+V2 <- V2 %>%
+  slice(-(1:2)) %>%
+  select(-ID)   
+
+# Combine value columns of V1 and V2 into question_table
+question_table <- question_table %>%
+  left_join(V1, by = "variable") %>%
+  left_join(V2, by = "variable")
+
+# Transpose question_mean and convert it into a data frame suitable for joining
+question_mean <- question_mean %>%
+  gather(key = "variable", value = "Mean")
+
+# Add question_mean values as the new variable "Mean"
+question_table <- question_table %>%
+  left_join(question_mean, by = "variable")
+
+# Add question_mean values as the new variable "Mean"
+question_mean <- question_mean %>%
+  gather(key = "variable", value = "Mean") %>%
+  mutate(Mean = round(Mean, 2))
+  
 # Rename variables
 question_table <- question_table %>% 
   rename(ID = variable,
-         Question = value)
+         Question = value.x,
+         Section = value.y,
+         Topic = value)
 
-# Transpose question_mean as data frame
-question_mean_t <- as.data.frame(t(question_mean))
-
-# Reset row names to default integer sequence
-rownames(question_mean_t) <- seq_len(nrow(question_mean_t))
-
-# Create a new column with the old column names
-question_mean_t <- data.frame(Variable = colnames(question_mean), question_mean_t, row.names = NULL)
-
-# Remove the row where Variable is 'Mean'
-question_mean <- question_mean_t[question_mean_t$Variable != "Mean", ]
-
-# Rename variables
-question_mean <- question_mean %>% 
-  rename (ID = Variable,
-          Mean = V1)
-
-# Marge question table and mean
-question_table <- left_join(question_table, question_mean, by = "ID")
+# Change the order of appearance
+question_table <- question_table %>% 
+  select(ID, Section, Topic, Question, Mean)
 
 # Create gt table and change the font size
 gt_question_table <- gt(question_table) %>%
@@ -113,4 +138,31 @@ gt_question_table <- gt(question_table) %>%
 gt_question_table
 ```
 
+```{r, echo=FALSE}
 
+# Compute the mean by section
+section_table <- question_table %>%
+  group_by(Section) %>%
+  summarise(Mean = mean(Mean, na.rm = TRUE)) %>%
+  mutate(Mean = round(Mean, 3))
+
+# Compute the mean by Topic
+topic_table <- question_table %>%
+  group_by(Topic) %>%
+  summarise(Mean = mean(Mean, na.rm = TRUE)) %>%
+  mutate(Mean = round(Mean, 3))
+
+# Create gt table and change the font size
+gt_section_table <- gt(section_table) %>%
+  tab_options(
+    table.font.size = px(13)  # Adjust the font size here
+  )
+gt_section_table
+
+# Create gt table and change the font size
+gt_topic_table <- gt(topic_table) %>%
+  tab_options(
+    table.font.size = px(13)  # Adjust the font size here
+  )
+gt_topic_table
+```
