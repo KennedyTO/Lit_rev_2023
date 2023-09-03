@@ -65,7 +65,7 @@ gt_table
 
 ### 2) Obtain mean scores for each question
 ```{r}
-# Calculate column means using summarise(across()) from dplyr
+# Calculate column means 
 question_mean <- study_mean %>%
   select(-ID) %>%  # Remove ID and Mean columns
   summarise(across(everything(), mean, na.rm = TRUE))
@@ -73,12 +73,44 @@ question_mean <- study_mean %>%
 # Extracting the third row and transposing it
 question_table <- master_dat %>% 
   slice(3) %>%
-  gather(key = "variable", value = "value", -ID)  # Omit the ID column from gathering if you have one
+  gather(key = "variable", value = "value", -ID) 
 
 # Remove the first two rows and the first column from the transposed dataset
 question_table <- question_table %>%
   slice(-(1:2)) %>%
   select(-ID)   
+
+# Rename variables
+question_table <- question_table %>% 
+  rename(ID = variable,
+         Question = value)
+
+# Transpose question_mean as data frame
+question_mean_t <- as.data.frame(t(question_mean))
+
+# Reset row names to default integer sequence
+rownames(question_mean_t) <- seq_len(nrow(question_mean_t))
+
+# Create a new column with the old column names
+question_mean_t <- data.frame(Variable = colnames(question_mean), question_mean_t, row.names = NULL)
+
+# Remove the row where Variable is 'Mean'
+question_mean <- question_mean_t[question_mean_t$Variable != "Mean", ]
+
+# Rename variables
+question_mean <- question_mean %>% 
+  rename (ID = Variable,
+          Mean = V1)
+
+# Marge question table and mean
+question_table <- left_join(question_table, question_mean, by = "ID")
+
+# Create gt table and change the font size
+gt_question_table <- gt(question_table) %>%
+  tab_options(
+    table.font.size = px(13)  # Adjust the font size here
+  )
+gt_question_table
 ```
 
 
