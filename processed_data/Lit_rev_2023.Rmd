@@ -15,7 +15,6 @@ library(knitr)
 library(tidyverse)
 library(gt)
 
-
 # Read excel file
 master_dat <- read_excel("~/Desktop/IRP/Literature_review_2023/raw_data/Dat_01.xlsx")
 ```
@@ -24,30 +23,30 @@ master_dat <- read_excel("~/Desktop/IRP/Literature_review_2023/raw_data/Dat_01.x
 #### 1) Obtain mean score for each study
 ```{r, echo=FALSE} 
 # Get Row Means and Column Means.
-master_means <- master_dat %>%
+study_mean <- master_dat %>%
   slice(4:n()) %>%
   select(-c(1, 3))
 
 # Replace "YES" with 1 and "NO" with 0 in columns Q01 to Q47
-master_means <- master_means %>%
+study_mean <- study_mean %>%
   mutate(across(Q01:Q47, ~ case_when(
     . == "Yes" ~ as.numeric(1),
     . == "No" ~ as.numeric(0),
     is.na(.) ~ NA_real_
   )))
 
-master_means <- master_means %>% 
+study_mean <- study_mean %>% 
   mutate(across(starts_with("Q"), as.numeric))
 
 # Calculate row means for columns Q01 to Q47
-master_means <- master_means %>%
+study_mean <- study_mean %>%
   rowwise() %>%
   mutate(Mean = mean(c_across(Q01:Q47), na.rm = TRUE)) %>%
   ungroup()
 
 # Create tables
 study_table <- master_dat %>%
-  left_join(master_means, by = "ID") %>%
+  left_join(study_mean, by = "ID") %>%
   select(ID, Study, Author, Mean) 
 
 # Remove first three rows from study_table
@@ -63,4 +62,23 @@ gt_table <- gt(study_table) %>%
 # Display the gt table
 gt_table
 ```
+
+### 2) Obtain mean scores for each question
+```{r}
+# Calculate column means using summarise(across()) from dplyr
+question_mean <- study_mean %>%
+  select(-ID) %>%  # Remove ID and Mean columns
+  summarise(across(everything(), mean, na.rm = TRUE))
+
+# Extracting the third row and transposing it
+question_table <- master_dat %>% 
+  slice(3) %>%
+  gather(key = "variable", value = "value", -ID)  # Omit the ID column from gathering if you have one
+
+# Remove the first two rows and the first column from the transposed dataset
+question_table <- question_table %>%
+  slice(-(1:2)) %>%
+  select(-ID)   
+```
+
 
