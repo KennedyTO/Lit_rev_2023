@@ -167,31 +167,38 @@ section_table <- question_table %>%
 # Create gt table and change the font size
 gt_section_table <- gt(section_table) %>%
   tab_options(
-    table.font.size = px(15)  # Adjust the font size here
+    table.font.size = px(15)
+  ) %>% 
+  cols_align(
+    align = "left"
   )
-gt_section_table
 
+gt_section_table
+gt::gtsave(gt_section_table, filename = "/Users/kensuzuki/Desktop/IRP/Literature_review_2023/Images/gt_section_table.png")
 ```
 
 #### 4) Mean Scores by Topic
 ```{r, echo=FALSE}
-# Compute the mean by Topic
+# Assuming question_table is defined and appropriate libraries are loaded
 topic_table <- question_table %>%
-  group_by(Topic) %>%
-  summarise(Mean = mean(Mean, na.rm = TRUE)) %>%
-  mutate(Mean = round(Mean, 3)) 
-
-
+  group_by(Topic, Section) %>%
+  summarise(Mean = mean(Mean, na.rm = TRUE), .groups = 'drop') %>%
+  mutate(Mean = round(Mean, 3))
 
 # Create gt table and change the font size
 gt_topic_table <- gt(topic_table) %>%
-  tab_options(
-    table.font.size = px(15)  # Adjust the font size here
-  )
+  tab_options(table.font.size = px(15)) %>%
+  cols_align(
+    align = "left",
+    columns = c(Topic, Section, Mean)
+  )  # Closing parenthesis was missing here
+
+# Print the table
 gt_topic_table
 
 # Save table as .png image
 gt::gtsave(gt_topic_table, filename = "/Users/kensuzuki/Desktop/IRP/Literature_review_2023/Images/gt_topic_table.png")
+
 ```
 
 #### 4) Machine Learning Models by Category
@@ -201,10 +208,9 @@ gt::gtsave(gt_topic_table, filename = "/Users/kensuzuki/Desktop/IRP/Literature_r
 df <- data.frame(
   Category = c(
     "Regression-based models", "Support Vector Machines", "Decision Trees and Ensembles",
-    "Neural Networks", "Bayesian Models", "Instance-based models", "Boosting Algorithms",
-    "Hidden Markov Models", "Other"
+    "Neural Networks", "Bayesian Models", "Instance-based models", "Other"
   ),
-  Frequency = c(7, 13, 17, 4, 17, 5, 1, 1, 22)
+  Frequency = c(7, 13, 17, 4, 17, 5, 18)
 )
 
 # Sort by frequency, but place 'Other' at the bottom
@@ -230,8 +236,8 @@ gt::gtsave(gt_Category, filename = "/Users/kensuzuki/Desktop/IRP/Literature_revi
 ```{r, echo=FALSE}
 
 regression_based_models <- data.frame(
-  Regression = c("LASSO", "Elastic Net", "Linear Regression", "Multiple Linear Regression", "Non-linear Regression"),
-  Frequency = c(2, 2, 1, 1, 1)
+  Regression = c("LASSO", "Elastic Net", "Logistic Regression", "Linear Regression", "Multiple Linear Regression", "Non-linear Regression"),
+  Frequency = c(2, 2, 2, 1, 1, 1)
 )
 # Create gt table for regression_based_models and adjust the font size
 gt_regression_based_models <- gt(regression_based_models) %>%
@@ -301,8 +307,8 @@ gt::gtsave(gt_neural_network_models, filename = "/Users/kensuzuki/Desktop/IRP/Li
 ##### Bayesian Models
 ```{r, echo = FALSE}
 bayesian_models <- data.frame(
-  Bayesian = c("BayesNet", "BayesNet/searchAlgorithm", "Logistic Regression", "BayesNet/estimator", "Naïve Bayes"),
-  Frequency = c(7, 5, 2, 2, 1)
+  Bayesian = c("BayesNet", "BayesNet/searchAlgorithm", "BayesNet/estimator", "Naïve Bayes"),
+  Frequency = c(7, 5, 2, 1)
 )
 
 # Create gt table for bayesian_models and adjust the font size
@@ -320,8 +326,8 @@ gt::gtsave(gt_bayesian_models, filename = "/Users/kensuzuki/Desktop/IRP/Literatu
 ##### Instance based Models
 ```{r, echo = FALSE}
 instance_based_models <- data.frame(
-  Instance_Based = c( "IBk/nNSearchAlgorithm", "K-nearest neighbors (KNN)", "IBk"),
-  Frequency = c(3, 1, 1)
+  Instance_Based = c( "Instance-Based k", "k-Nearest Neighbors (KNN)"),
+  Frequency = c(4, 1)
 )
 
 # Create gt table for instance_based_models and adjust the font size
@@ -336,49 +342,11 @@ gt_instance_based_models
 gt::gtsave(gt_instance_based_models, filename = "/Users/kensuzuki/Desktop/IRP/Literature_review_2023/Images/gt_instance_based_models.png")
 ```
 
-##### Boosting Algorithms
-```{r, echo=FALSE}
-boosting_algorithms <- data.frame(
-  Boosting_Algorithms = c("ADAboost Regressor"),
-  Frequency = c(1)
-)
-
-# Create gt table for boosting_algorithms and adjust the font size
-gt_boosting_algorithms <- gt(boosting_algorithms) %>%
-  tab_options(
-    table.font.size = px(15)
-  )
-
-gt_boosting_algorithms
-
-# Save table as .png image
-gt::gtsave(gt_boosting_algorithms, filename = "/Users/kensuzuki/Desktop/IRP/Literature_review_2023/Images/gt_boosting_algorithms.png")
-```
-
-##### Hidden Markov Models
-```{r, echo=FALSE}
-hidden_markov_models <- data.frame(
-  Hidden_Markov = c("Hidden Markov"),
-  Frequency = c(1)
-)
-
-# Create gt table for hidden_markov_models and adjust the font size
-gt_hidden_markov_models <- gt(hidden_markov_models) %>%
-  tab_options(
-    table.font.size = px(15)
-  )
-gt_hidden_markov_models
-
-
-# Save table as .png image
-gt::gtsave(gt_hidden_markov_models, filename = "/Users/kensuzuki/Desktop/IRP/Literature_review_2023/Images/gt_hidden_markov_models.png")
-```
-
 ##### Other Models
 ```{r, echo=FALSE}
 other_models <- data.frame(
-  Others = c("Conjunctive Clause Evolutionary Algorithm (CCEA)", "MondoBrain Augmented Intelligence System", "Mixture models", "BFtree", "Conjunctive Rule", "DTNB", "FT", "FURIA", "KStar", "LWL", "NNGE", "RIDOR", "RBFNetwork", "SPEGASOS", "Ensemble Strategies", "Personalized Bayesian"),
-  Frequency = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+  Others = c("ADAboost Regressor", "Conjunctive Clause Evolutionary Algorithm (CCEA)", "MondoBrain Augmented Intelligence System", "Mixture models", "BFtree", "Conjunctive Rule", "DTNB", "FT", "FURIA", "KStar", "LWL", "NNGE", "RIDOR", "RBFNetwork", "SPEGASOS", "Ensemble Strategies", "Personalized Bayesian", "Hidden Markov"),
+  Frequency = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1,1)
 )
 
 # Create gt table for other_models and adjust the font size
@@ -390,6 +358,78 @@ gt_other_models
 
 # Save table as .png image
 gt::gtsave(gt_other_models, filename = "/Users/kensuzuki/Desktop/IRP/Literature_review_2023/Images/gt_other_models.png")
+```
+
+#### 5) List of Top Performers
+
+```{r, echo=FALSE}
+# Define the custom order for the 'Section' column
+ordered_sections <- c("Abstract", "Introduction", "Methods", "Results", "Discussion")
+
+# Convert 'Section' into an ordered factor
+question_top <- question_table %>%
+  mutate(Section = factor(Section, levels = ordered_sections, ordered = TRUE)) %>%
+  arrange(Section, desc(Topic), desc(Mean)) %>%
+  filter(Mean > 0.8)
+
+# Create gt table for question_top and adjust the font size
+gt_question_top <- gt(question_top) %>%
+  tab_options(
+    table.font.size = px(15)
+  )
+
+gt_question_top 
+
+# Save table as .png image
+gt::gtsave(gt_question_top, filename = "/Users/kensuzuki/Desktop/IRP/Literature_review_2023/Images/gt_question_top.png")
+
+```
+
+# List of Bottom Performers
+```{r, echo=FALSE}
+
+# Define the custom order for the 'Section' column
+ordered_sections <- c("Abstract", "Introduction", "Methods", "Results", "Discussion")
+
+# Convert 'Section' into an ordered factor and filter for "Methods" and "Discussion"
+question_bottom <- question_table %>%
+  mutate(Section = factor(Section, levels = ordered_sections, ordered = TRUE)) %>%
+  filter(Section %in% c("Methods", "Discussion"), Mean < 0.7) %>%
+  arrange(ID, Section, desc(Mean)) %>%
+  select(ID, Section, Topic, Question, Mean)
+
+# Create gt table for question_bottom and adjust the font size
+gt_question_bottom <- gt(question_bottom) %>%
+  tab_options(
+    table.font.size = px(15)
+  )
+
+# Display the gt table
+gt_question_bottom
+
+# Save table as .png image
+gt::gtsave(gt_question_bottom, filename = "/Users/kensuzuki/Desktop/IRP/Literature_review_2023/Images/gt_question_bottom.png")
+
+```
+```{r, echo=FALSE}
+mean(study_mean$Mean)
+min(study_mean$Mean)
+max(study_mean$Mean)
+```
+
+```{r}
+# Open the graphics device
+png("/Users/kensuzuki/desktop/IRP/Literature_review_2023/images/histogram.png")
+
+# Plot the histogram
+hist(study_mean$Mean, 
+     main = "Mean Score Distribution of 20 Studies", 
+     xlab = "Mean Value", 
+     col = "steelblue", 
+     border = "white")
+
+# Close the graphics device
+dev.off()
 ```
 
 
