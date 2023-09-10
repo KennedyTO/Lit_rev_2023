@@ -370,7 +370,7 @@ ordered_sections <- c("Abstract", "Introduction", "Methods", "Results", "Discuss
 question_top <- question_table %>%
   mutate(Section = factor(Section, levels = ordered_sections, ordered = TRUE)) %>%
   arrange(Section, desc(Topic), desc(Mean)) %>%
-  filter(Mean > 0.8)
+  filter(Mean >= 0.818655)
 
 # Create gt table for question_top and adjust the font size
 gt_question_top <- gt(question_top) %>%
@@ -394,7 +394,7 @@ ordered_sections <- c("Abstract", "Introduction", "Methods", "Results", "Discuss
 # Convert 'Section' into an ordered factor and filter for "Methods" and "Discussion"
 question_bottom <- question_table %>%
   mutate(Section = factor(Section, levels = ordered_sections, ordered = TRUE)) %>%
-  filter(Section %in% c("Methods", "Discussion"), Mean < 0.7) %>%
+  filter(Mean <= 0.547645) %>%
   arrange(ID, Section, desc(Mean)) %>%
   select(ID, Section, Topic, Question, Mean)
 
@@ -412,9 +412,12 @@ gt::gtsave(gt_question_bottom, filename = "/Users/kensuzuki/Desktop/IRP/Literatu
 
 ```
 ```{r, echo=FALSE}
-mean(study_mean$Mean)
+mean_score <- mean(study_mean$Mean)
 min(study_mean$Mean)
 max(study_mean$Mean)
+sd <- sd(study_mean$Mean)
+mean_score+sd
+mean_score-sd
 ```
 
 ```{r}
