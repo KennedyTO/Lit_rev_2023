@@ -88,7 +88,7 @@ question_table <- master_dat %>%
 # Remove the first two rows and the first column from the transposed dataset
 question_table <- question_table %>%
   slice(-(1:2)) %>%
-  select(-ID)   
+  select(-ID)
 
 # Extract the first row and transpose it
 V1 <- master_dat %>% 
@@ -427,6 +427,31 @@ hist(study_mean$Mean,
 dev.off()
 ```
 
+```{r}
+Comparison_table <- question_table %>% 
+  select(ID, Section, Mean)
+
+# First, we'll remove rows where Mean is NA.
+Comparison_table <- Comparison_table[!is.na(Comparison_table$Mean), ]
+
+# Calculate the standard deviation for each section.
+section_sd <- Comparison_table %>%
+  group_by(Section) %>%
+  summarise(sd = sd(Mean))
+
+print(section_sd)
+
+# Calculate the standard deviation for the combined results.
+combined_sd <- sd(Comparison_table$Mean)
+print(paste("Combined SD:", round(combined_sd, 4)))
+
+# Compare the standard deviations:
+section_sd %>%
+  mutate(Comparison = ifelse(sd > combined_sd, "Higher", ifelse(sd < combined_sd, "Lower", "Equal"))) %>%
+  print()
+
+
+```
 
 <style>
   .gt_table {
