@@ -21,6 +21,7 @@ library(tidyverse)
 library(gt)
 library(gtsummary)
 library(webshot2)
+library(rstatix)
 
 # Read excel file
 master_dat <- read_excel("~/Desktop/IRP/Literature_review_2023/raw_data/Dat_01.xlsx")
@@ -427,31 +428,91 @@ hist(study_mean$Mean,
 dev.off()
 ```
 
-```{r}
-Comparison_table <- question_table %>% 
-  select(ID, Section, Mean)
+#### Calculation of Sectional Mean and SD + Cut off 
+```{r, echo = FALSE}
 
-# First, we'll remove rows where Mean is NA.
-Comparison_table <- Comparison_table[!is.na(Comparison_table$Mean), ]
+summary(section_table)
+str(section_table)
 
-# Calculate the standard deviation for each section.
-section_sd <- Comparison_table %>%
-  group_by(Section) %>%
-  summarise(sd = sd(Mean))
+# Calculate SD
+section_standard_deviation <- sd(section_table$Mean,na.rm = TRUE)
+print(paste("Sectuib Standard Deviation: ", section_standard_deviation))
 
-print(section_sd)
+# Calculate mean of Section
+section_mean_value <- mean(section_table$Mean, na.rm=TRUE)
+print(section_mean_value)
 
-# Calculate the standard deviation for the combined results.
-combined_sd <- sd(Comparison_table$Mean)
-print(paste("Combined SD:", round(combined_sd, 4)))
-
-# Compare the standard deviations:
-section_sd %>%
-  mutate(Comparison = ifelse(sd > combined_sd, "Higher", ifelse(sd < combined_sd, "Lower", "Equal"))) %>%
-  print()
-
+# Uppercut off
+section_mean_value + 1 * section_standard_deviation
 
 ```
+
+
+#### Calucaltion of Performance Boundarites (Low and high performnce by Criterion)
+```{r, echo = FALSE}
+# Summary of question_table
+summary(question_table)
+str(question_table)
+
+# Calculate standard deviation of Mean
+Q_standard_deviation <- sd(question_table$Mean, na.rm = TRUE)
+print(paste("Standard Deviation: ", Q_standard_deviation))
+
+# Calculate mean of Mean
+mean_value <- mean(question_table$Mean, na.rm = TRUE)
+print(mean_value)
+
+# Calculate values two SDs away from the mean
+lower_bound <- mean_value - 1 * Q_standard_deviation
+upper_bound <- mean_value + 1 * Q_standard_deviation
+
+print(paste("Lower Bound (One SDs away from Mean): ", lower_bound))
+print(paste("Upper Bound (One SDs away from Mean): ", upper_bound))
+
+# Define the top and bottom performing threshold
+top_performing_threshold <- upper_bound  
+bottom_performing_threshold <- lower_bound  
+
+# Filter topics based on performance
+top_performing <- subset(question_table, Mean > top_performing_threshold)
+bottom_performing <- subset(question_table, Mean < bottom_performing_threshold)
+
+# Create gt table for question_top and adjust the font size
+gt_question_top <- gt(top_performing) %>% 
+  tab_options(table.font.size = px(15)
+  )
+
+# Display the gt table
+gt_question_top
+
+# Save table as .png image
+gt::gtsave(gt_question_top, filename = "/Users/kensuzuki/Desktop/IRP/Literature_review_2023/Images/gt_question_top.png")
+
+print("Bottom-Performing Topics")
+print(bottom_performing)
+
+# Create gt table for question_bottom and adjust the font size
+gt_question_bottom <- gt(bottom_performing) %>%
+  tab_options(
+    table.font.size = px(15)
+  )
+
+# Display the gt table
+gt_question_bottom
+
+# Save table as .png image
+gt::gtsave(gt_question_bottom, filename = "/Users/kensuzuki/Desktop/IRP/Literature_review_2023/Images/gt_question_bottom.png")
+
+```
+
+```{r}
+get_summary_stats(question_table)
+
+```
+
+
+
+
 
 <style>
   .gt_table {
