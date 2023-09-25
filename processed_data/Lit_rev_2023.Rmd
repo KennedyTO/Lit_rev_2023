@@ -454,15 +454,15 @@ section_mean_value + 1 * section_standard_deviation
 summary(question_table)
 str(question_table)
 
-# Calculate standard deviation of Mean
-Q_standard_deviation <- sd(question_table$Mean, na.rm = TRUE)
+# Calculate and round standard deviation of Mean to 2 decimal places
+Q_standard_deviation <- round(sd(question_table$Mean, na.rm = TRUE), 2)
 print(paste("Standard Deviation: ", Q_standard_deviation))
 
-# Calculate mean of Mean
-mean_value <- mean(question_table$Mean, na.rm = TRUE)
-print(mean_value)
+# Calculate and round mean of Mean to 2 decimal places
+mean_value <- round(mean(question_table$Mean, na.rm = TRUE), 2)
+print(paste("Mean: ", mean_value))
 
-# Calculate values two SDs away from the mean
+# Calculate values one SD away from the mean
 lower_bound <- mean_value - 1 * Q_standard_deviation
 upper_bound <- mean_value + 1 * Q_standard_deviation
 
@@ -470,17 +470,23 @@ print(paste("Lower Bound (One SDs away from Mean): ", lower_bound))
 print(paste("Upper Bound (One SDs away from Mean): ", upper_bound))
 
 # Define the top and bottom performing threshold
-top_performing_threshold <- upper_bound  
-bottom_performing_threshold <- lower_bound  
+top_performing_threshold <- upper_bound
+bottom_performing_threshold <- lower_bound
+
+# Small number for tolerance
+tolerance <- 1e-10
 
 # Filter topics based on performance
-top_performing <- subset(question_table, Mean > top_performing_threshold)
-bottom_performing <- subset(question_table, Mean < bottom_performing_threshold)
+top_performing <- subset(question_table, Mean >= (top_performing_threshold - tolerance))
+bottom_performing <- subset(question_table, Mean <= (bottom_performing_threshold + tolerance))
+
+# Select only the columns "ID", "Criteria", and "Mean"
+top_performing_selected <- top_performing %>% 
+  select(ID, Question, Topic, Section, Mean)
 
 # Create gt table for question_top and adjust the font size
-gt_question_top <- gt(top_performing) %>% 
-  tab_options(table.font.size = px(15)
-  )
+gt_question_top <- gt(top_performing_selected) %>% 
+  tab_options(table.font.size = px(15))
 
 # Display the gt table
 gt_question_top
@@ -488,25 +494,54 @@ gt_question_top
 # Save table as .png image
 gt::gtsave(gt_question_top, filename = "/Users/kensuzuki/Desktop/IRP/Literature_review_2023/Images/gt_question_top.png")
 
-print("Bottom-Performing Topics")
-print(bottom_performing)
 
-# Create gt table for question_bottom and adjust the font size
-gt_question_bottom <- gt(bottom_performing) %>%
-  tab_options(
-    table.font.size = px(15)
-  )
+# Select only the columns "ID", "Criteria", and "Mean"
+bottom_performing_selected <- bottom_performing %>% 
+  select(ID, Question, Topic, Section, Mean)
+
+# Create gt table for question_top and adjust the font size
+gt_question_bottom <- gt(bottom_performing_selected) %>% 
+  tab_options(table.font.size = px(15))
 
 # Display the gt table
 gt_question_bottom
+
 
 # Save table as .png image
 gt::gtsave(gt_question_bottom, filename = "/Users/kensuzuki/Desktop/IRP/Literature_review_2023/Images/gt_question_bottom.png")
 
 ```
 
+##### Standard statistics for List of Studies
 ```{r}
-get_summary_stats(question_table)
+stats_study_table<- get_summary_stats(study_table)
+gt_stats_study_table <- gt(stats_study_table) %>%
+  tab_options(
+    table.font.size = px(15)
+  )
+
+# Display the gt table
+gt_stats_study_table
+
+# Save table as .png image
+gt::gtsave(gt_stats_study_table, filename = "/Users/kensuzuki/Desktop/IRP/Literature_review_2023/Images/gt_stats_study_table.png")
+```
+
+
+
+#### Standard Statistics for Table of Criteria
+```{r}
+criteria_stats<- get_summary_stats(question_table)
+gt_criteria_stats <- gt(criteria_stats) %>%
+  tab_options(
+    table.font.size = px(15)
+  )
+
+# Display the gt table
+gt_criteria_stats
+
+# Save table as .png image
+gt::gtsave(gt_criteria_stats, filename = "/Users/kensuzuki/Desktop/IRP/Literature_review_2023/Images/gt_criteria_stats.png")
 
 ```
 
